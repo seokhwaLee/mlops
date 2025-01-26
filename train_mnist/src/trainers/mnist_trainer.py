@@ -63,13 +63,13 @@ class MNISTTrainer(pl.LightningModule):
         self.log("test_acc", acc)
 
     def save_model(self):
-        model_path = (
-            f"{Configs.MODEL_EXPORT_PATH}/{get_next_version(Configs.MODEL_EXPORT_PATH)}"
-        )
+        version = get_next_version(Configs.MODEL_EXPORT_PATH)
+        model_path = f"{Configs.MODEL_EXPORT_PATH}/{version}"
         os.mkdir(model_path)
         self.model.save_model(f"{model_path}/model.pt")
-        with open(f"{model_path}/config.pbtxt", "w") as f:
-            f.write("""
+        if version == 1:
+            with open(f"{Configs.MODEL_EXPORT_PATH}/config.pbtxt", "w") as f:
+                f.write("""
 name: "resnet18"
 platform: "pytorch_libtorch"
 max_batch_size: 8
@@ -87,5 +87,5 @@ output [
     dims: [10]
 }
 ]
-""")
+    """)
         return model_path

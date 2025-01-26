@@ -132,5 +132,6 @@ class ResNet(nn.Module):
         Args:
             path (str): The path to save the model file.
         """
-        torch.save(self.state_dict(), path)
+        scripted_model = torch.jit.script(self)
+        scripted_model.save(path)
         print(f"Model saved to {path}")
