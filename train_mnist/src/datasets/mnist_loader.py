@@ -22,7 +22,7 @@ train_transform = transforms.Compose(
     ]
 )
 
-download = True if os.path.exists(Configs.DATASET_PATH) else False
+download = False if os.path.exists(f"{Configs.DATASET_PATH}/MNIST") else True
 
 train_dataset = MNIST(
     root=Configs.DATASET_PATH, train=True, transform=train_transform, download=download
