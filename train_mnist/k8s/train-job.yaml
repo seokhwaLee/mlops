@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: mnist-train:v0.13
+        command: ["python", "train.py"]
+        volumeMounts:
+        - name: train-data
+          mountPath: /data
+        - name: model
+          mountPath: /model
+        env:
+        - name: PATH_DATASETS
+          value: "/data"
+        - name: PATH_CHECKPOINT
+          value: "/model"
+      volumes:
+      - name: train-data
+        persistentVolumeClaim:
+          claimName: train-data-pvc
+      - name: model
+        persistentVolumeClaim:
+          claimName: model-pvc          
+      restartPolicy: Never
+  backoffLimit: 4
