@@ -73,3 +73,6 @@ if __name__ == "__main__":
             "weight_decay": Configs.WEIGHT_DECAY,
         },
     )
+
+    model_path = resnet_model.save_model()
+    print(f"model saved : {model_path}")

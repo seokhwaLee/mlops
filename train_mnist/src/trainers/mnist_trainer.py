@@ -1,8 +1,11 @@
+import os
+
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from utils import create_model
+from configs import Configs
+from utils import create_model, get_next_version
 
 
 class MNISTTrainer(pl.LightningModule):
@@ -58,3 +61,31 @@ class MNISTTrainer(pl.LightningModule):
         preds = self.model(imgs).argmax(dim=-1)
         acc = (labels == preds).float().mean()
         self.log("test_acc", acc)
+
+    def save_model(self):
+        model_path = (
+            f"{Configs.MODEL_EXPORT_PATH}/{get_next_version(Configs.MODEL_EXPORT_PATH)}"
+        )
+        os.mkdir(model_path)
+        self.model.save_model(f"{model_path}/model.pt")
+        with open(f"{model_path}/config.pbtxt", "w") as f:
+            f.write("""
+name: "resnet18"
+platform: "pytorch_libtorch"
+max_batch_size: 8
+input [
+{
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [1, 28, 28]
+}
+]
+output [
+{
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [10]
+}
+]
+""")
+        return model_path

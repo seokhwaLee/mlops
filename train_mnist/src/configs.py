@@ -19,3 +19,7 @@ class Configs:
     C_HIDDEN = os.environ.get("C_HIDDEN", [16, 32, 64])
     NUM_BLOCKS = os.environ.get("NUM_BLOCKS", [3, 3, 3])
     EPOCHS = os.environ.get("EPOCHS", 1)
+    MODEL_EXPORT_PATH = os.environ.get(
+        "MODEL_EXPORT_PATH",
+        "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/resnet18",
+    )

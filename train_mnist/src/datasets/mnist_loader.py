@@ -44,7 +44,7 @@ train_loader = data.DataLoader(
     batch_size=128,
     shuffle=True,
     drop_last=True,
-    pin_memory=True,
+    pin_memory=False,
     num_workers=0,
 )
 val_loader = data.DataLoader(

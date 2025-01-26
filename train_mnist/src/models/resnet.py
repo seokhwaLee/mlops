@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import torch
 import torch.nn as nn
 
 
@@ -124,3 +125,12 @@ class ResNet(nn.Module):
         x = self.input_net(x)
         x = self.blocks(x)
         return self.output_net(x)
+
+    def save_model(self, path: str):
+        """Save the model to the specified path in .pt format.
+
+        Args:
+            path (str): The path to save the model file.
+        """
+        torch.save(self.state_dict(), path)
+        print(f"Model saved to {path}")
