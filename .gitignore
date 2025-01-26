@@ -1,3 +1,5 @@
 .venv
-train/data
-train/checkpoints
+.env
+train_mnist/data
+train_mnist/checkpoints
+__pycache__
