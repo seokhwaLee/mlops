@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import pytorch_lightning as pl
 import torch
@@ -65,7 +65,7 @@ class MNISTTrainer(pl.LightningModule):
     def save_model(self):
         version = get_next_version(Configs.MODEL_EXPORT_PATH)
         model_path = f"{Configs.MODEL_EXPORT_PATH}/{version}"
-        os.mkdir(model_path)
+        Path(model_path).mkdir(parents=True, exist_ok=True)
         self.model.save_model(f"{model_path}/model.pt")
         if version == 1:
             with open(f"{Configs.MODEL_EXPORT_PATH}/config.pbtxt", "w") as f:

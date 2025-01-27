@@ -45,11 +45,11 @@ train_loader = data.DataLoader(
     shuffle=True,
     drop_last=True,
     pin_memory=False,
-    num_workers=0,
+    num_workers=4,
 )
 val_loader = data.DataLoader(
-    val_set, batch_size=128, shuffle=False, drop_last=False, num_workers=0
+    val_set, batch_size=128, shuffle=False, drop_last=False, num_workers=2
 )
 test_loader = data.DataLoader(
-    test_set, batch_size=128, shuffle=False, drop_last=False, num_workers=0
+    test_set, batch_size=128, shuffle=False, drop_last=False, num_workers=2
 )

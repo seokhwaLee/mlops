@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: model-pv
+  name: checkpoint-pv
 spec:
   capacity:
     storage: 1Gi
@@ -11,18 +11,18 @@ spec:
   volumeMode: Filesystem
   storageClassName: standard # Minikube 기본 StorageClass
   hostPath:
-    path: /home/docker/models
+    path: /home/docker/checkpoints
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: model-pvc
+  name: checkpoint-pvc
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
-  volumeName: model-pv 
+  volumeName: checkpoint-pv 
   storageClassName: standard # Minikube 기본 StorageClass

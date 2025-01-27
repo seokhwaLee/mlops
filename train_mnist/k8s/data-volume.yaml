@@ -11,7 +11,7 @@ spec:
   volumeMode: Filesystem
   storageClassName: standard # Minikube 기본 StorageClass
   hostPath:
-    path: /Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data
+    path: /home/docker/data
 
 ---
 apiVersion: v1
