@@ -11,8 +11,8 @@ from save_images_as_jpg import load_mnist_images, load_mnist_labels, save_images
 
 url = os.environ.get("TRITON_SERVER_URL", "localhost:8001")
 model_name = os.environ.get("MODEL_NAME", "resnet18")
-batch_size = int(os.environ.get("BATCH_SIZE", 8))
-log_sample_count = int(os.environ.get("LOG_SAMPLE_COUNT", 10))
+batch_size = int(os.environ.get("BATCH_SIZE", "8"))
+log_sample_count = int(os.environ.get("LOG_SAMPLE_COUNT", "10"))
 mnist_raw_data_path = os.environ.get(
     "MNIST_RAW_DATA_PATH",
     "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data",
@@ -76,6 +76,7 @@ def infer_batch(batch_data):
 
 if __name__ == "__main__":
     if not any(os.scandir(inference_image_dir)):
+        print("Convert MNIST images from ubyte format to JPG for inference")
         convert_mnist_image(mnist_raw_data_path, inference_image_dir, num_images)
 
     all_results = []
@@ -84,7 +85,10 @@ if __name__ == "__main__":
     output_path = f"{output_dir}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
     Path(output_path).mkdir(parents=True, exist_ok=True)
 
+    print("Create inference batches from the image directory")
     batches = create_batches(inference_image_dir, batch_size)
+
+    print("Send an inference request to the Triton server")
     for batch_idx, (batch_data, batch_paths) in enumerate(batches, start=1):
         start_time = time.time()
         output_data = infer_batch(batch_data)
@@ -113,11 +117,11 @@ if __name__ == "__main__":
         with open(batch_output_file, "w") as f:
             json.dump(batch_results, f, indent=4)
 
-    print(f"Total Size: {total_size} images")
-    print(f"Total Latency: {total_latency:.2f} ms")
-    print(f"All inference results saved to {output_path}")
-
     random_samples = random.sample(all_results, min(log_sample_count, len(all_results)))
     print("\nRandom Sampled Results:")
     for img_path, predicted_class, result in random_samples:
         print(f"{Path(img_path).name}: {predicted_class} | {result}")
+
+    print(f"Total Count: {total_size} images")
+    print(f"Total Latency: {total_latency:.2f} ms")
+    print(f"All inference results saved to {output_path}")

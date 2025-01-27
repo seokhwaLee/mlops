@@ -27,5 +27,27 @@ sh 1-run-train.sh
 sh 2-deploy-triton-server.sh
 
 # 2-4. 추론(Inference) 실행
+# 추론도 최초 요청 시에만 MNIST 데이터셋을 jpg로 변환하여 저장합니다.
 sh 3-run-inference.sh
+```
+
+### 3. 결과 파일 확인
+```
+# 3-2 로그 확인 : k9s
+brew install derailed/k9s/k9s
+k9s
+# 리소스 검색은 ":" 를 누른 뒤 리소스명을 입력 후 enter 누르기 (ex. : > pod > enter)
+# pod 로그 확인하려면 "l" 누르기
+# manifest yaml확인하려면 리소스 위에서 "y" 누르기
+# 이전 화면으로 돌아가려면 "esc"누르기
+
+
+# 3-2 minikube vm에 접속하여 결과파일을 확인할 수 있습니다.
+# 학습 데이터 : ~/data
+# 학습모델 체크포인트 : ~/checkpoints
+# 모델 : ~/models
+# 추론 이미지 데이터 : ~/inference_data
+# 추론 결과 데이터 : ~/inference_output_data
+
+minikube ssh
 ```

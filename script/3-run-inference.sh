@@ -10,5 +10,6 @@ else
 fi
 
 cd "$PROJECT_ROOT/inference_mnist/k8s"
+CURRENT_TIME=$(date +"%Y%m%d%H%M%S")
 sed -i "" "4s/.*/  name: inference-client-${CURRENT_TIME}/" grpc-client-pod.yaml
 kubectl apply -f .

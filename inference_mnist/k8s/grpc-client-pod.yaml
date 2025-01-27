@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: inference-client
+  name: inference-client-20250128022504
   labels:
     app: inference-client
 spec:
   containers:
   - name: inference-client
-    image: inference-client:v0.2
+    image: inference-client:v0.21
     imagePullPolicy: IfNotPresent
     env:
     - name: TRITON_SERVER_URL
@@ -18,6 +18,8 @@ spec:
       value: "/inference_datas"
     - name: OUTPUT_DIR
       value: "/output"
+    - name: NUM_IMAGES
+      value: "100"
     volumeMounts:
     - name: inference-data
       mountPath: /inference_datas

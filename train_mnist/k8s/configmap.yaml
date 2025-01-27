@@ -11,5 +11,5 @@ data:
   ACT_FN_NAME: "relu"
   C_HIDDEN: "[16, 32, 64]"
   NUM_BLOCKS: "[3, 3, 3]"
-  BATCH_SIZE: "128"
+  BATCH_SIZE: "256"
   EPOCHS: "10"

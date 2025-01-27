@@ -25,4 +25,4 @@ cd "$PROJECT_ROOT/train_mnist"
 docker build -t mnist-train:v0.21 .
 
 cd "$PROJECT_ROOT/inference_mnist"
-docker build -t inference-client:v0.2 .
+docker build -t inference-client:v0.21 .
