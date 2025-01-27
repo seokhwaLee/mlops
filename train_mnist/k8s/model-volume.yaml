@@ -9,10 +9,9 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
-  storageClassName: standard # Minikube 기본 StorageClass
+  storageClassName: standard
   hostPath:
     path: /home/docker/models
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -24,5 +23,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: model-pv 
-  storageClassName: standard # Minikube 기본 StorageClass
+  volumeName: model-pv
+  storageClassName: standard

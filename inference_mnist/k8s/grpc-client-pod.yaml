@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: inference-client-20250128022504
+  name: inference-client
   labels:
     app: inference-client
 spec:

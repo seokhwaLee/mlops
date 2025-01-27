@@ -5,7 +5,7 @@ metadata:
   labels:
     app: triton-server
 spec:
-  type: NodePort # 필요 시 LoadBalancer로 변경 가능
+  type: ClusterIP
   ports:
   - port: 8000
     targetPort: 8000

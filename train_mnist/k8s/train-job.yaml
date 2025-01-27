@@ -37,4 +37,4 @@ spec:
         persistentVolumeClaim:
           claimName: model-pvc          
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 1

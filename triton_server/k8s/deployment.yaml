@@ -21,9 +21,9 @@ spec:
         - tritonserver
         - --model-repository=/models
         ports:
-        - containerPort: 8000 # HTTP
-        - containerPort: 8001 # gRPC
-        - containerPort: 8002 # Metrics
+        - containerPort: 8000
+        - containerPort: 8001
+        - containerPort: 8002
         volumeMounts:
         - name: model-repository
           mountPath: /models
