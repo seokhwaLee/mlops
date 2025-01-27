@@ -16,11 +16,15 @@ spec:
       value: "/data"
     - name: IMAGE_DIR
       value: "/inference_datas"
+    - name: OUTPUT_DIR
+      value: "/output"
     volumeMounts:
     - name: inference-data
       mountPath: /inference_datas
     - name: mnist-raw-data
       mountPath: /data
+    - name: inference-output-data
+      mountPath: /output
   volumes:
   - name: mnist-raw-data
     persistentVolumeClaim:
@@ -28,4 +32,7 @@ spec:
   - name: inference-data
     persistentVolumeClaim:
       claimName: inference-data-pvc
+  - name: inference-output-data
+    persistentVolumeClaim:
+      claimName: inference-output-data-pvc
   restartPolicy: Never

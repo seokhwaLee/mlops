@@ -22,7 +22,7 @@ inference_image_dir = os.environ.get(
     "IMAGE_DIR",
     "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/test_datas",
 )
-output_file = os.environ.get("OUTPUT_FILE", f"{inference_image_dir}/results")
+output_dir = os.environ.get("OUTPUT_DIR", inference_image_dir)
 
 
 def convert_mnist_image(raw_path, target_dir, num_images):
@@ -81,6 +81,8 @@ if __name__ == "__main__":
     all_results = []
     total_size = 0
     total_latency = 0.0
+    output_path = f"{output_dir}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+    Path(output_path).mkdir(parents=True, exist_ok=True)
 
     batches = create_batches(inference_image_dir, batch_size)
     for batch_idx, (batch_data, batch_paths) in enumerate(batches, start=1):
@@ -107,15 +109,15 @@ if __name__ == "__main__":
             )
             all_results.append((img_path, predicted_class, result))
 
-        batch_output_file = f"{output_file}_batch_{batch_idx}.json"
+        batch_output_file = f"{output_path}/batch_{batch_idx}.json"
         with open(batch_output_file, "w") as f:
             json.dump(batch_results, f, indent=4)
 
     print(f"Total Size: {total_size} images")
     print(f"Total Latency: {total_latency:.2f} ms")
-    print(f"All inference results saved to {output_file}")
+    print(f"All inference results saved to {output_path}")
 
     random_samples = random.sample(all_results, min(log_sample_count, len(all_results)))
     print("\nRandom Sampled Results:")
     for img_path, predicted_class, result in random_samples:
-        print(f"{img_path}: {predicted_class} | {result}")
+        print(f"{Path(img_path).name}: {predicted_class} | {result}")
