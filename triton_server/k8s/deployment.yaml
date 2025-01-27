@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: triton-server
+  labels:
+    app: triton-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: triton-server
+  template:
+    metadata:
+      labels:
+        app: triton-server
+    spec:
+      containers:
+      - name: triton-server
+        image: nvcr.io/nvidia/tritonserver:24.12-py3
+        args:
+        - tritonserver
+        - --model-repository=/models
+        ports:
+        - containerPort: 8000
+        - containerPort: 8001
+        - containerPort: 8002
+        volumeMounts:
+        - name: model-repository
+          mountPath: /models
+      volumes:
+      - name: model-repository
+        persistentVolumeClaim:
+          claimName: model-pvc  

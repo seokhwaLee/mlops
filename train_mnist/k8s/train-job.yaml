@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: train
+spec:
+  template:
+    spec:
+      containers:
+      - name: mnist-train
+        image: mnist-train:v0.21
+        command: ["python", "train.py"]
+        volumeMounts:
+        - name: train-data
+          mountPath: /data
+        - name: checkpoint
+          mountPath: /checkpoint
+        - name: model
+          mountPath: /model
+        env:
+        - name: PATH_DATASETS
+          value: "/data"
+        - name: PATH_CHECKPOINT
+          value: "/checkpoint"
+        - name: MODEL_EXPORT_PATH
+          value: "/model/resnet18"
+        envFrom:
+        - configMapRef:
+            name: mlops-configs
+      volumes:
+      - name: train-data
+        persistentVolumeClaim:
+          claimName: train-data-pvc
+      - name: checkpoint
+        persistentVolumeClaim:
+          claimName: checkpoint-pvc
+      - name: model
+        persistentVolumeClaim:
+          claimName: model-pvc          
+      restartPolicy: Never
+  backoffLimit: 1

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: inference-output-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  storageClassName: standard
+  hostPath:
+    path: /home/docker/inference_output_data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inference-output-data-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: inference-output-data-pv
+  storageClassName: standard
+
