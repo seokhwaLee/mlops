@@ -35,6 +35,9 @@ curl -v localhost:8000/v2/health/ready
 # triton server 배포 완료 후 추론을 실행합니다.
 # 추론도 최초 요청 시에만 MNIST 데이터셋을 jpg로 변환하여 저장합니다.
 sh 3-run-inference.sh
+# 추론 이미지를 다시 만들고 싶은 경우 minikube vm에 접속하여 inference_data를 옮기거나 삭제하면 됩니다.
+minikube ssh
+sudo mv ~/inference_data ~/inference_data_backup
 ```
 
 ### 3. 결과 확인
