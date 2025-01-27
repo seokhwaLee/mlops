@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: mnist-train
-        image: mnist-train:v0.2
+        image: mnist-train:v0.21
         command: ["python", "train.py"]
         volumeMounts:
         - name: train-data
@@ -23,10 +23,9 @@ spec:
           value: "/checkpoint"
         - name: MODEL_EXPORT_PATH
           value: "/model/resnet18"
-        - name: BATCH_SISE
-          value: "128"
-        - name: EPOCHS
-          value: "10"
+        envFrom:
+        - configMapRef:
+            name: mlops-configs
       volumes:
       - name: train-data
         persistentVolumeClaim:

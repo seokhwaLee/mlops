@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mlops-configs
+data:
+  RANDOM_SEED: "10"
+  OPTIMIZER: "SGD"
+  LEARNING_RATE: "0.1"
+  MOMENTUM: "0.9"
+  WEIGHT_DECAY: "0.0001"
+  ACT_FN_NAME: "relu"
+  C_HIDDEN: "[16, 32, 64]"
+  NUM_BLOCKS: "[3, 3, 3]"
+  BATCH_SIZE: "128"
+  EPOCHS: "10"

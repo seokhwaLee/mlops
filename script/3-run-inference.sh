@@ -10,5 +10,5 @@ else
 fi
 
 cd "$PROJECT_ROOT/inference_mnist/k8s"
-kubectl delete -f grpc-client-pod.yaml
+sed -i "" "4s/.*/  name: inference-client-${CURRENT_TIME}/" grpc-client-pod.yaml
 kubectl apply -f .

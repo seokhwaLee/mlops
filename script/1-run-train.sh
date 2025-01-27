@@ -11,5 +11,6 @@ fi
 
 # train job 배포
 cd "$PROJECT_ROOT/train_mnist/k8s"
-kubectl delete -f train-job.yaml
+CURRENT_TIME=$(date +"%Y%m%d%H%M%S")
+sed -i "" "4s/.*/  name: train-${CURRENT_TIME}/" train-job.yaml
 kubectl apply -f .
