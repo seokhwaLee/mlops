@@ -6,11 +6,12 @@ import numpy as np
 import tritonclient.grpc as grpcclient
 from PIL import Image
 
-url = "10.97.121.159:8001"
-model_name = "resnet18"
-batch_size = 8
-output_file = "output_results.txt"
-log_sample_count = 10
+url = os.environ.get("TRITON_SERVER_URL", "triton-server-service:8001")
+model_name = os.environ.get("MODEL_NAME", "resnet18")
+batch_size = int(os.environ.get("BATCH_SIZE", 8))
+log_sample_count = int(os.environ.get("LOG_SAMPLE_COUNT", 10))
+image_dir = os.environ.get("IMAGE_DIR", "/home/docker/inference_datas")
+output_file = os.environ.get("OUTPUT_FILE", f"{image_dir}/output_results.txt")
 
 
 def preprocess_image(image_path):
@@ -58,7 +59,6 @@ def infer_batch(batch_data):
 
 
 all_results = []
-image_dir = "./test_datas"
 batches = create_batches(image_dir, batch_size)
 
 for batch_data, batch_paths in batches:

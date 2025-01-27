@@ -4,9 +4,9 @@ import struct
 import numpy as np
 from PIL import Image
 
-MNIST_IMAGE_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-images-idx3-ubyte"
-MNIST_LABEL_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-labels-idx1-ubyte"
-OUTPUT_DIR = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/test_datas"
+MNIST_IMAGE_PATH = "/home/docker/data/MNIST/raw/train-images-idx3-ubyte"
+MNIST_LABEL_PATH = "/home/docker/data/MNIST/raw/train-labels-idx1-ubyte"
+OUTPUT_DIR = "/home/docker/inference_mnist/test_datas"
 
 
 def load_mnist_images(file_path):

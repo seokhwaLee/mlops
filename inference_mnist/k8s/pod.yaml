@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: inference-client
+  labels:
+    app: inference-client
+spec:
+  containers:
+  - name: inference-client
+    image: inference-client:v0.11
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: TRITON_SERVER_URL
+      value: "triton-server-service.default.svc.cluster.local:8001"
+    - name: IMAGE_DIR
+      value: "/inference_datas"
+    volumeMounts:
+    - name: inference-data
+      mountPath: /inference_datas
+  volumes:
+  - name: inference-data
+    persistentVolumeClaim:
+      claimName: inference-data-pvc
