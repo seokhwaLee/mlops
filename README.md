@@ -1,9 +1,11 @@
-# mlops
+# mlops 
+[인프라 명세 및 아키텍처](https://nifty-marten-089.notion.site/MLOPS-18814179deda80808914f38dbed92f9c?pvs=4)
 
 ## 개발환경 세팅 및 실행 방법 (macOS 기준)
 
 ### 1. Minikube 설치 및 시작
-Minikube를 설치하고 실행합니다.
+Minikube를 설치하고 실행합니다. 
+(프로젝트에서 사용한 minikube version: 1.35.0)
 ```bash
 # Minikube 설치
 brew install minikube
