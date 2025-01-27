@@ -44,21 +44,21 @@ train_workers, val_workers, test_workers = get_tvt_cpu_worker_count()
 
 train_loader = data.DataLoader(
     train_set,
-    batch_size=Configs.BATCH_SISE,
+    batch_size=Configs.BATCH_SIZE,
     shuffle=True,
     drop_last=True,
     num_workers=train_workers,
 )
 val_loader = data.DataLoader(
     val_set,
-    batch_size=Configs.BATCH_SISE,
+    batch_size=Configs.BATCH_SIZE,
     shuffle=False,
     drop_last=False,
     num_workers=val_workers,
 )
 test_loader = data.DataLoader(
     test_set,
-    batch_size=Configs.BATCH_SISE,
+    batch_size=Configs.BATCH_SIZE,
     shuffle=False,
     drop_last=False,
     num_workers=test_workers,

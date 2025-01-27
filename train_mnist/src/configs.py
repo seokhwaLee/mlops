@@ -19,7 +19,7 @@ class Configs:
     ACT_FN_NAME = os.environ.get("ACT_FN_NAME", "relu")
     C_HIDDEN = ast.literal_eval(os.environ.get("C_HIDDEN", "[16, 32, 64]"))
     NUM_BLOCKS = ast.literal_eval(os.environ.get("NUM_BLOCKS", "[3, 3, 3]"))
-    BATCH_SISE = int(os.environ.get("BATCH_SIZE", "128"))
+    BATCH_SIZE = int(os.environ.get("BATCH_SIZE", "128"))
     EPOCHS = int(os.environ.get("EPOCHS", "10"))
     MODEL_EXPORT_PATH = os.environ.get(
         "MODEL_EXPORT_PATH",
