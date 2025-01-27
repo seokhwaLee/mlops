@@ -2,4 +2,5 @@
 .env
 train_mnist/data
 train_mnist/checkpoints
+inference_mnist/test_datas
 __pycache__

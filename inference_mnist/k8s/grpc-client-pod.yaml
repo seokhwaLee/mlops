@@ -7,17 +7,25 @@ metadata:
 spec:
   containers:
   - name: inference-client
-    image: inference-client:v0.11
+    image: inference-client:v0.2
     imagePullPolicy: IfNotPresent
     env:
     - name: TRITON_SERVER_URL
       value: "triton-server-service.default.svc.cluster.local:8001"
+    - name: MNIST_RAW_DATA_PATH
+      value: "/data"
     - name: IMAGE_DIR
       value: "/inference_datas"
     volumeMounts:
     - name: inference-data
       mountPath: /inference_datas
+    - name: mnist-raw-data
+      mountPath: /data
   volumes:
+  - name: mnist-raw-data
+    persistentVolumeClaim:
+      claimName: train-data-pvc
   - name: inference-data
     persistentVolumeClaim:
       claimName: inference-data-pvc
+  restartPolicy: Never

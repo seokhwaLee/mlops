@@ -46,13 +46,12 @@ def train_model(model_name, save_name=None, **kwargs):
         print(f"Not Found pretrained model at {pretrained_filename}, pass...")
         pl.seed_everything(Configs.RANDOM_SEED)
         model = MNISTTrainer(model_name=model_name, **kwargs)
-    trainer.fit(model, train_loader, val_loader)
+    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=val_loader)
     model = MNISTTrainer.load_from_checkpoint(
         trainer.checkpoint_callback.best_model_path
     )
-    val_result = trainer.test(model, dataloaders=val_loader, verbose=False)
     test_result = trainer.test(model, dataloaders=test_loader, verbose=False)
-    result = {"test": test_result[0]["test_acc"], "val": val_result[0]["test_acc"]}
+    result = {"test": test_result[0]["test_acc"]}
     print(f"accuracy - {result}")
     return model, result
 

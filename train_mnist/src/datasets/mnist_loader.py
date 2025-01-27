@@ -6,6 +6,7 @@ import torch.utils.data as data
 from configs import Configs
 from torchvision import transforms
 from torchvision.datasets import MNIST
+from utils import get_tvt_cpu_worker_count
 
 DATA_MEANS = 0.13066047430038452
 DATA_STD = 0.30810782313346863
@@ -39,17 +40,26 @@ test_set = MNIST(
     root=Configs.DATASET_PATH, train=False, transform=test_transform, download=download
 )
 
+train_workers, val_workers, test_workers = get_tvt_cpu_worker_count()
+
 train_loader = data.DataLoader(
     train_set,
-    batch_size=128,
+    batch_size=Configs.BATCH_SISE,
     shuffle=True,
     drop_last=True,
-    pin_memory=False,
-    num_workers=4,
+    num_workers=train_workers,
 )
 val_loader = data.DataLoader(
-    val_set, batch_size=128, shuffle=False, drop_last=False, num_workers=2
+    val_set,
+    batch_size=Configs.BATCH_SISE,
+    shuffle=False,
+    drop_last=False,
+    num_workers=val_workers,
 )
 test_loader = data.DataLoader(
-    test_set, batch_size=128, shuffle=False, drop_last=False, num_workers=2
+    test_set,
+    batch_size=Configs.BATCH_SISE,
+    shuffle=False,
+    drop_last=False,
+    num_workers=test_workers,
 )

@@ -4,10 +4,6 @@ import struct
 import numpy as np
 from PIL import Image
 
-MNIST_IMAGE_PATH = "/home/docker/data/MNIST/raw/train-images-idx3-ubyte"
-MNIST_LABEL_PATH = "/home/docker/data/MNIST/raw/train-labels-idx1-ubyte"
-OUTPUT_DIR = "/home/docker/inference_mnist/test_datas"
-
 
 def load_mnist_images(file_path):
     with open(file_path, "rb") as f:
@@ -41,7 +37,14 @@ def save_images_as_jpg(images, labels, output_dir, num_images=10):
 
 
 if __name__ == "__main__":
+    MNIST_IMAGE_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-images-idx3-ubyte"
+    MNIST_LABEL_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-labels-idx1-ubyte"
+    OUTPUT_DIR = (
+        "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/test_datas"
+    )
+    NUM_IMAGES = 10
+
     images = load_mnist_images(MNIST_IMAGE_PATH)
     labels = load_mnist_labels(MNIST_LABEL_PATH)
 
-    save_images_as_jpg(images, labels, OUTPUT_DIR, num_images=10)
+    save_images_as_jpg(images, labels, OUTPUT_DIR, num_images=NUM_IMAGES)

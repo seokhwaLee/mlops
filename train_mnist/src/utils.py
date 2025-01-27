@@ -22,3 +22,20 @@ def get_next_version(model_dir):
         next_version = 1
 
     return next_version
+
+
+def get_tvt_cpu_worker_count():
+    total_cores = os.cpu_count()
+    if total_cores == 1:
+        train_workers = 0
+        val_workers = 0
+        test_workers = 0
+    else:
+        train_workers = max(1, int(total_cores * 0.6))
+        val_workers = max(1, int(total_cores * 0.3))
+        test_workers = total_cores
+    print(f"Total CPU cores: {total_cores}")
+    print(f"Train loader workers: {train_workers}")
+    print(f"Validation loader workers: {val_workers}")
+    print(f"Test loader workers: {test_workers}")
+    return train_workers, val_workers, test_workers

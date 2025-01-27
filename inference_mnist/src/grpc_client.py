@@ -1,17 +1,36 @@
+import json
 import os
 import random
 import time
+from pathlib import Path
 
 import numpy as np
 import tritonclient.grpc as grpcclient
 from PIL import Image
+from save_images_as_jpg import load_mnist_images, load_mnist_labels, save_images_as_jpg
 
-url = os.environ.get("TRITON_SERVER_URL", "triton-server-service:8001")
+url = os.environ.get("TRITON_SERVER_URL", "localhost:8001")
 model_name = os.environ.get("MODEL_NAME", "resnet18")
 batch_size = int(os.environ.get("BATCH_SIZE", 8))
 log_sample_count = int(os.environ.get("LOG_SAMPLE_COUNT", 10))
-image_dir = os.environ.get("IMAGE_DIR", "/home/docker/inference_datas")
-output_file = os.environ.get("OUTPUT_FILE", f"{image_dir}/output_results.txt")
+mnist_raw_data_path = os.environ.get(
+    "MNIST_RAW_DATA_PATH",
+    "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data",
+)
+num_images = int(os.environ.get("NUM_IMAGES", "64"))
+inference_image_dir = os.environ.get(
+    "IMAGE_DIR",
+    "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/test_datas",
+)
+output_file = os.environ.get("OUTPUT_FILE", f"{inference_image_dir}/results")
+
+
+def convert_mnist_image(raw_path, target_dir, num_images):
+    mnist_image_path = f"{raw_path}/MNIST/raw/train-images-idx3-ubyte"
+    mnist_label_path = f"{raw_path}/MNIST/raw/train-labels-idx1-ubyte"
+    images = load_mnist_images(mnist_image_path)
+    labels = load_mnist_labels(mnist_label_path)
+    save_images_as_jpg(images, labels, target_dir, num_images=num_images)
 
 
 def preprocess_image(image_path):
@@ -51,28 +70,52 @@ def infer_batch(batch_data):
     inputs = grpcclient.InferInput("input", batch_data.shape, "FP32")
     inputs.set_data_from_numpy(batch_data)
     outputs = grpcclient.InferRequestedOutput("output")
-    start_time = time.time()
     response = client.infer(model_name=model_name, inputs=[inputs], outputs=[outputs])
-    latency = (time.time() - start_time) * 1000
-    print(f"Batch Size: {batch_data.shape[0]}, Latency: {latency:.2f} ms")
     return response.as_numpy("output")
 
 
-all_results = []
-batches = create_batches(image_dir, batch_size)
+if __name__ == "__main__":
+    if not any(os.scandir(inference_image_dir)):
+        convert_mnist_image(mnist_raw_data_path, inference_image_dir, num_images)
 
-for batch_data, batch_paths in batches:
-    output_data = infer_batch(batch_data)
-    for img_path, result in zip(batch_paths, output_data):
-        all_results.append((img_path, result))
+    all_results = []
+    total_size = 0
+    total_latency = 0.0
 
-with open(output_file, "w") as f:
-    for img_path, result in all_results:
-        f.write(f"{img_path}: {result.tolist()}\n")
+    batches = create_batches(inference_image_dir, batch_size)
+    for batch_idx, (batch_data, batch_paths) in enumerate(batches, start=1):
+        start_time = time.time()
+        output_data = infer_batch(batch_data)
+        latency = (time.time() - start_time) * 1000
+        print(f"Batch Size: {batch_data.shape[0]}, Latency: {latency:.2f} ms")
 
-print(f"All inference results saved to {output_file}")
+        total_size += batch_data.shape[0]
+        total_latency += latency
+        batch_results = {
+            "batch_size": batch_data.shape[0],
+            "inference_time_ms": round(latency, 2),
+            "results": [],
+        }
+        for img_path, result in zip(batch_paths, output_data):
+            predicted_class = np.argmax(result)
+            batch_results["results"].append(
+                {
+                    "image_name": Path(img_path).name,
+                    "predicted_class": str(predicted_class),  # 최대값을 가진 클래스
+                    "confidence_scores": result.tolist(),
+                }
+            )
+            all_results.append((img_path, predicted_class, result))
 
-random_samples = random.sample(all_results, min(log_sample_count, len(all_results)))
-print("\nRandom Sampled Results:")
-for img_path, result in random_samples:
-    print(f"{img_path}: {result}")
+        batch_output_file = f"{output_file}_batch_{batch_idx}.json"
+        with open(batch_output_file, "w") as f:
+            json.dump(batch_results, f, indent=4)
+
+    print(f"Total Size: {total_size} images")
+    print(f"Total Latency: {total_latency:.2f} ms")
+    print(f"All inference results saved to {output_file}")
+
+    random_samples = random.sample(all_results, min(log_sample_count, len(all_results)))
+    print("\nRandom Sampled Results:")
+    for img_path, predicted_class, result in random_samples:
+        print(f"{img_path}: {predicted_class} | {result}")

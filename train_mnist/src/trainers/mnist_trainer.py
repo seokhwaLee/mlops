@@ -46,21 +46,26 @@ class MNISTTrainer(pl.LightningModule):
         preds = self.model(imgs)
         loss = self.loss_module(preds, labels)
         acc = (preds.argmax(dim=-1) == labels).float().mean()
-        self.log("train_acc", acc, on_step=False, on_epoch=True)
-        self.log("train_loss", loss)
+        self.log("train_acc", acc, prog_bar=False, on_step=True, on_epoch=True)
+        self.log("train_loss", loss, prog_bar=False, on_step=True, on_epoch=True)
+        print(
+            f"[Training] Step {batch_idx}: Loss={loss.item():.4f}, Acc={acc.item():.4f}"
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
         imgs, labels = batch
         preds = self.model(imgs).argmax(dim=-1)
         acc = (labels == preds).float().mean()
-        self.log("val_acc", acc)
+        self.log("val_acc", acc, prog_bar=False)
+        print(f"[Validation] Step {batch_idx}: Acc={acc.item():.4f}")
 
     def test_step(self, batch, batch_idx):
         imgs, labels = batch
         preds = self.model(imgs).argmax(dim=-1)
         acc = (labels == preds).float().mean()
-        self.log("test_acc", acc)
+        self.log("test_acc", acc, prog_bar=False)
+        print(f"[Test] Step {batch_idx}: Acc={acc.item():.4f}")
 
     def save_model(self):
         version = get_next_version(Configs.MODEL_EXPORT_PATH)
