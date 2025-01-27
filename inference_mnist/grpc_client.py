@@ -1,5 +1,6 @@
 import os
 import random
+import time
 
 import numpy as np
 import tritonclient.grpc as grpcclient
@@ -49,7 +50,10 @@ def infer_batch(batch_data):
     inputs = grpcclient.InferInput("input", batch_data.shape, "FP32")
     inputs.set_data_from_numpy(batch_data)
     outputs = grpcclient.InferRequestedOutput("output")
+    start_time = time.time()
     response = client.infer(model_name=model_name, inputs=[inputs], outputs=[outputs])
+    latency = (time.time() - start_time) * 1000
+    print(f"Batch Size: {batch_data.shape[0]}, Latency: {latency:.2f} ms")
     return response.as_numpy("output")
 
 
