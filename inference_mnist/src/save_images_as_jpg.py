@@ -34,17 +34,3 @@ def save_images_as_jpg(images, labels, output_dir, num_images=10):
         file_path = os.path.join(output_dir, f"mnist_{i}_label_{label}.jpg")
         image.save(file_path)
         print(f"Saved: {file_path}")
-
-
-if __name__ == "__main__":
-    MNIST_IMAGE_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-images-idx3-ubyte"
-    MNIST_LABEL_PATH = "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/train_mnist/data/MNIST/raw/train-labels-idx1-ubyte"
-    OUTPUT_DIR = (
-        "/Users/aimmo-aiy-0297/Desktop/workspace/mlops/inference_mnist/test_datas"
-    )
-    NUM_IMAGES = 10
-
-    images = load_mnist_images(MNIST_IMAGE_PATH)
-    labels = load_mnist_labels(MNIST_LABEL_PATH)
-
-    save_images_as_jpg(images, labels, OUTPUT_DIR, num_images=NUM_IMAGES)
